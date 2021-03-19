@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>K³ Research Documentation Project</title>
+    <link>https://outerhaven.de/</link>
+    <description>Recent content on K³ Research Documentation Project</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 20 Jul 2020 20:00:00 +0200</lastBuildDate>
+    
+	<atom:link href="https://outerhaven.de/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Writing an iOS Kernel Exploit from Scratch</title>
+      <link>https://outerhaven.de/post/writing-an-ios-kernel-exploit-from-scratch/</link>
+      <pubDate>Mon, 20 Jul 2020 20:00:00 +0200</pubDate>
+      
+      <guid>https://outerhaven.de/post/writing-an-ios-kernel-exploit-from-scratch/</guid>
+      <description>Please see https://www.secfault-security.com/blog/chain3.html</description>
+    </item>
+    
+    <item>
+      <title>More on FreeBSD Refcount Overflows</title>
+      <link>https://outerhaven.de/post/more-on-freebsd-refcount-overflows/</link>
+      <pubDate>Fri, 30 Aug 2019 20:00:00 +0200</pubDate>
+      
+      <guid>https://outerhaven.de/post/more-on-freebsd-refcount-overflows/</guid>
+      <description>Please see https://www.secfault-security.com/blog/FreeBSD-SA-1924.mqueuefs.html</description>
+    </item>
+    
+    <item>
+      <title>Exploiting FreeBSD-SA-19:02.fd</title>
+      <link>https://outerhaven.de/post/exploiting-freebsd-sa-1902.fd/</link>
+      <pubDate>Mon, 08 Jul 2019 20:00:00 +0200</pubDate>
+      
+      <guid>https://outerhaven.de/post/exploiting-freebsd-sa-1902.fd/</guid>
+      <description>Please see https://www.secfault-security.com/blog/FreeBSD-SA-1902.fd.html</description>
+    </item>
+    
+    <item>
+      <title>Small Mistakes Lead To Big Problems</title>
+      <link>https://outerhaven.de/post/small-mistakes-lead-to-big-problems/</link>
+      <pubDate>Sun, 22 Apr 2018 20:00:00 +0200</pubDate>
+      
+      <guid>https://outerhaven.de/post/small-mistakes-lead-to-big-problems/</guid>
+      <description>Introduction While I don&amp;rsquo;t have much time at the moment for my FreeBSD kernel exploitation project, I needed a small break and had a look at a smaller PHP project. I searched for something which is small enough to read the code fast in its entirety to improve my general source code assessment skills. I ended with PHPLiteAdmin, a small project which seems to be something like PHPMyAdmin but for SQLite database files.</description>
+    </item>
+    
+    <item>
+      <title>Every Journey Starts with a FAIL</title>
+      <link>https://outerhaven.de/post/every-journey-starts-with-a-fail/</link>
+      <pubDate>Thu, 15 Feb 2018 19:48:27 +0200</pubDate>
+      
+      <guid>https://outerhaven.de/post/every-journey-starts-with-a-fail/</guid>
+      <description>Introduction Not long ago I started looking into FreeBSD kernel exploitation. There are only a few ressources but probably the best starting point is argp&amp;rsquo;s Phrack article from 2009. And while he does only provide one technique, I wanted to understand it and port it to a modern FreeBSD release before describing new, own researched techniques.
+Well, at least this was my plan. In reality I ended researching how different operating systems resp.</description>
+    </item>
+    
+  </channel>
+</rss>

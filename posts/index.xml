@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Posts on K³ Research Documentation Project</title>
+    <link>http://example.org/posts/</link>
+    <description>Recent content in Posts on K³ Research Documentation Project</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 22 Apr 2018 20:00:00 +0200</lastBuildDate>
+    
+	<atom:link href="http://example.org/posts/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Small mistakes lead to big problems</title>
+      <link>http://example.org/posts/small-mistakes-lead-to-big-problems/</link>
+      <pubDate>Sun, 22 Apr 2018 20:00:00 +0200</pubDate>
+      
+      <guid>http://example.org/posts/small-mistakes-lead-to-big-problems/</guid>
+      <description>Introduction While I don&amp;rsquo;t have much time at the moment for my FreeBSD kernel exploitation project, I needed a small break and had a look at a smaller PHP project. I searched for something which is small enough to read the code fast in its entirety to improve my general source code assessment skills. I ended with PHPLiteAdmin, a small project which seems to be something like PHPMyAdmin but for SQLite database files.</description>
+    </item>
+    
+    <item>
+      <title>Every Journey Starts with a FAIL</title>
+      <link>http://example.org/posts/every-journey-starts-with-a-fail/</link>
+      <pubDate>Thu, 15 Feb 2018 19:48:27 +0200</pubDate>
+      
+      <guid>http://example.org/posts/every-journey-starts-with-a-fail/</guid>
+      <description>0 - Introduction 1 - The Problem 2 - Debugging 3 - Redemption 4 - Why the Original Code Worked While It Was Wrong 5 - Misc.
+&amp;ndash;[ 0 - Introduction
+Not long ago I started looking into FreeBSD kernel exploitation. There are only a few ressources but probably the best starting point is argp&amp;rsquo;s Phrack article from 2009[0]. And while he does only provide one technique, I wanted to understand it and port it to a modern FreeBSD release before describing new, own researched techniques.</description>
+    </item>
+    
+  </channel>
+</rss>

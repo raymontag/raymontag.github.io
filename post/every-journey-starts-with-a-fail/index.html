@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html
+  class=""
+  lang="en-us"
+  prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb#"
+>
+  <head>
+    <meta charset="utf-8" />
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="description" content="" />
+<meta name="HandheldFriendly" content="True" />
+<meta name="MobileOptimized" content="320" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="description" content="...or Understanding Syscall Conventions for Different Platforms" />
+
+<meta name="keywords" content="">
+
+
+<meta property="og:type" content="article" />
+<meta property="og:description" content="...or Understanding Syscall Conventions for Different Platforms" />
+<meta property="og:title" content="Every Journey Starts with a FAIL" />
+<meta property="og:site_name" content="K³ Research Documentation Project" />
+<meta property="og:image" content="" />
+<meta property="og:image:type" content="image/jpeg" />
+<meta property="og:image:width" content="" />
+<meta property="og:image:height" content="" />
+<meta property="og:url" content="https://outerhaven.de/post/every-journey-starts-with-a-fail/" />
+<meta property="og:locale" content="en-us" />
+<meta property="article:published_time" content="2018-02-15
+" /> <meta property="article:modified_time" content="2018-02-15
+" />
+
+
+
+
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:site" content="@&lt;a href=&#39;https://twitter.com/gr4yf0x&#39;&gt;Twitter&lt;/a&gt;" />
+<meta name="twitter:creator" content="@&lt;a href=&#39;https://twitter.com/gr4yf0x&#39;&gt;Twitter&lt;/a&gt;" />
+<meta
+  name="twitter:title"
+  content="Every Journey Starts with a FAIL | K³ Research Documentation Project"
+/>
+<meta
+  name="twitter:description"
+  content="...or Understanding Syscall Conventions for Different Platforms|"
+/>
+<meta name="twitter:image:src" content="" />
+<meta name="twitter:domain" content="https://outerhaven.de/post/every-journey-starts-with-a-fail/" />
+
+
+
+    <title>Every Journey Starts with a FAIL</title>
+    <link rel="canonical" href="https://outerhaven.de/post/every-journey-starts-with-a-fail/" />
+
+
+    <link
+  rel="stylesheet"
+  href="https://unpkg.com/tachyons@4.11.1/css/tachyons.min.css"
+/>
+
+<link rel="stylesheet" href="https://outerhaven.de/css/style.css" />
+
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/highlightjs@9.12.0/styles/github-gist.css"
+/>
+
+
+
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  </head>
+
+      <center>
+<pre>
+    __ __ _____    ____                                        __  
+   / //_/|__  /   / __ \ ___   _____ ___   ____ _ _____ _____ / /_ 
+  / ,&lt;    /_ &lt;   / /_/ // _ \ / ___// _ \ / __ `// ___// ___// __ \
+ / /| | ___/ /  / _, _//  __/(__  )/  __// /_/ // /   / /__ / / / /
+/_/ |_|/____/  /_/ |_| \___//____/ \___/ \__,_//_/    \___//_/ /_/ 
+        </pre>
+</center>
+
+<body
+  lang="en-us"
+  class="sans-serif w-90 w-80-m w-60-ns center mv2 mv5-ns"
+  itemscope
+  itemtype="http://schema.org/Article"
+>
+  
+  <span class="b">/ </span>
+  <a href="https://outerhaven.de/" class="b bb bw1 pb1 no-underline black">K³ Research Documentation Project</a>
+  <span class="b"> / </span>
+  <a href="/post" class="b bb bw1 pb1 no-underline black">Blog</a>
+
+
+  
+  <section id="main" class="mt5">
+    <h1 itemprop="name" id="title">Every Journey Starts with a FAIL</h1>
+    <h2 itemprop="name" id="description">...or Understanding Syscall Conventions for Different Platforms</h2>
+    <span class="f6 gray">February 15, 2018</span>
+
+      <article itemprop="articleBody" id="content" class="w-90 lh-copy">
+        <h1 id="introduction">Introduction</h1>
+<p>Not long ago I started looking into FreeBSD kernel exploitation. There are
+only a few ressources but probably the best starting point is <a href="http://www.phrack.org/issues/66/8.html#article">argp&rsquo;s Phrack
+article from 2009</a>. And while he does only provide one technique, I wanted
+to understand it and port it to a modern FreeBSD release before describing
+new, own researched techniques.</p>
+<p>Well, at least this was my plan. In reality I ended researching how
+different operating systems resp. the same operating system but for
+different architectures implement syscalls. Hence, new exploiting methods
+have to wait for another post. In this one I want to describe my personal
+FAIL while porting argp&rsquo;s exploit example to a FreeBSD 11.1-RELEASE running
+on a 64bit processor. Maybe this will give other people interested in
+kernel stuff some insights they didn&rsquo;t know before. If you already know
+how syscalls work on 32bit and 64bit *BSD because you are an experienced
+exploit or kernel developer, you will probably want to search for something
+else to read. Moreover, some of the debugging stuff can look laborious
+because I wanted to show the steps I have done while attacking my problem
+instead of showing a simple walkthrough to the solution.</p>
+<h1 id="the-problem">The Problem</h1>
+<p>argp described in his article vulnerable code consisting of a loadable
+kernel module which exposes a syscall to the userland. Because it was
+written around the time when FreeBSD 8-RELEASE came out and because he has
+written himself that the code needs smaller adjustments to work with this
+version (it was written for FreeBSD 7) I thought I will first port it to
+FreeBSD 11.1-RELEASE. Moreover it was written for an Intel 32bit processor
+architecture as we can see from his shellcode examples. Hence, I wanted
+to go right away the harder way and modify it to work on an 64bit
+processor.</p>
+<p>The stripped down example which will be enough for this post looks like
+this:</p>
+<pre><code>struct argz
+{
+    char *buf;
+    u_int len;
+    int op;
+    u_int slot;
+};
+
+static int
+trigger(struct thread *td, struct argz *uap)
+{
+    uprintf(&quot;%p\n&quot;, uap-&gt;buf);
+    uprintf(&quot;%u\n&quot;, uap-&gt;len);
+    uprintf(&quot;%d\n&quot;, uap-&gt;op);
+    uprintf(&quot;%u\n&quot;, uap-&gt;slot);
+
+    return 0;
+}
+</code></pre>
+<p>The userland caller looks like this:</p>
+<pre><code>struct argz
+{
+    char *buf;
+    u_int len;
+    int op;
+    u_int slot;
+};
+
+int
+main(int argc, char *argv[])
+{
+    int sn, modid;
+    struct module_stat mstat;
+    struct argz vargz;
+
+    vargz.len = 256;
+    vargz.buf = calloc(vargz.len + 1, sizeof(char));
+
+    if(vargz.buf == NULL)
+    {
+        perror(&quot;calloc&quot;);
+        exit(1);
+    }
+
+    mstat.version = sizeof(mstat);
+    if((modid = modfind(&quot;sys/trigger&quot;)) == -1)
+        err(1, &quot;error in modfind&quot;);
+    if(modstat(modid, &amp;mstat) != 0)
+        err(1, &quot;error in modstat&quot;);
+
+    sn = mstat.data.intval;
+    vargz.op = 3;
+
+    vargz.slot = 1;
+    printf(&quot;%p\n&quot;, (void*)vargz.buf);
+    printf(&quot;%u\n&quot;, (void*)vargz.len);
+    printf(&quot;%d\n&quot;, (void*)vargz.op);
+    printf(&quot;%u\n&quot;, (void*)vargz.slot);
+    if(syscall(sn, vargz) != 0)
+        err(1, &quot;error in syscall&quot;);
+
+    free(vargz.buf);
+    return 0;
+}
+</code></pre>
+<p>So, after loading the kernel module with &lsquo;kldload trigger&rsquo; and executing
+the caller code, we would expect that the userland program prints the
+values of the members of &lsquo;struct argz&rsquo; and after the the kernel code does
+the same, wouldn&rsquo;t we? In other words, something like this:</p>
+<pre><code>root@freebsd64:trigger/ # kldload trigger
+trigger loader at 210
+root@freebsd64:trigger/ # ./trigger
+0x800e16000
+256
+3
+1
+0x800e16000
+256
+3
+1
+root@freebsd64:trigger/ # 
+</code></pre>
+<p>However, what we get in reality looks like this:</p>
+<pre><code>root@freebsd64:trigger/ # kldload trigger
+trigger loaded at 210
+root@freebsd64:trigger/ # ./trigger
+0x800e16000
+256
+3
+1
+0xd2
+1
+32767
+4294961816
+root@freebsd64:trigger/ # 
+</code></pre>
+<p>What the heck has just happened here? Moreover, we can easily verify that
+the code works as expected if we run it on a 32bit processor. If you think
+that this is not interesting at all, let&rsquo;s remove the printf calls from the
+userland code. We can see something like this:</p>
+<pre><code>root@freebsd64:trigger/ # ./trigger
+0x7fffffffeab0
+256
+3
+210
+root@freebsd64:trigger/ #
+</code></pre>
+<p>What? Removing the printf calls modified the pointer of our character
+buffer and some other variables, too. That is, we have a syscall that
+behaves differently depending on other code in userland before the
+syscall execution. Now, you should be baffled because an imperative
+programming language like C should behave deterministic - well, it still
+does but if you are not used to syscall conventions (like me before writing
+this) it does look undeterministic ;)</p>
+<p>But more on this later, first let us debug this a little bit.</p>
+<h1 id="debugging">Debugging</h1>
+<p>The first thing we could do is using truss(1), a tool from FreeBSD base
+which shows executed syscalls and corresponding arguments while a program
+runs. Attaching it to our trigger program will result in the following
+output (uninteresting syscalls are removed):</p>
+<pre><code>root@freebsd64:trigger/ # truss ./trigger
+...	
+modstat(0x1f1,0x7fffffffeab0)			        = 0 (0x0)
+0x7fffffffeab0
+256
+3
+210
+lkmnosys(0x7fffffffeab0,0x300000100,0xd2,0x140) = 0 (0x0)
+...
+</code></pre>
+<p>lkmnosys is our syscall. This name is hard coded into the kernel and
+corresponds to the syscall offset which was printed during the execution of
+kldload (&lsquo;trigger loaded at 210&rsquo;). The modstat(2) call before has the
+offset 301, for example.</p>
+<p>Two things should catch our eyes:</p>
+<ol>
+<li>Both, modstat(2) and our syscall, are called with the same stack adress
+which is printed out later.</li>
+<li>The printed out arguments are in another order passed to the syscall -
+The 3 is passed via the higher bits of the second argument while the 210 is
+passed via the third argument. The fourth argument is not printed out at
+all.</li>
+</ol>
+<p>That is, the arguments are already transferred wrong into the kernel space.
+Some online research led me to read about syscall conventions which are
+differently defined for different platforms. For 64bit FreeBSDs the
+arguments are passed to the kernel via the CPU registers RDI, RSI, RDX,
+RCX, R8 and R9. We can verify this by looking into the function
+&lsquo;cpu_fetch_syscall_args&rsquo; in &lsquo;sys/amd64/amd64/trap.c&rsquo;:</p>
+<pre><code>int
+cpu_fetch_syscall_args(struct thread *td, struct syscall_args *sa)
+{
+...
+frame = td-&gt;td_frame;
+reg = 0;
+regcnt = 6;
+
+params = (caddr_t)frame-&gt;tf_rsp + sizeof(register_t);
+...
+    reg++;
+    regcnt--;
+....
+argp = &amp;frame-&gt;tf_rdi;
+argp += reg;
+bcopy(argp, sa-&gt;args, sizeof(sa-&gt;args[0]) * regcnt);
+... // At this point syscall parameters are handled in cases
+... // one needs more than 5 parameters
+</code></pre>
+<p>}</p>
+<p>argp points to a &lsquo;struct trapframe&rsquo; which holds the values of the registers.
+args, which is referenced by &lsquo;sa-&gt;args&rsquo; is an array of eight register_t
+variables which are defined as int64. Hence, a syscall on a 64bit FreeBSD
+can have up to eight parameters.</p>
+<p>Now, we know how the syscall convention on a 64bit FreeBSD is defined.
+But we still don&rsquo;t know how to use this as we expected it to work as
+already used.</p>
+<h1 id="redemption">Redemption</h1>
+<p>Well, stubborn as I am and as pointed out by a friend I was just using
+syscall(2) wrong. If we look in the manpage of syscall(2), we can find this
+function prototype:</p>
+<pre><code>int syscall(int number, ...);
+</code></pre>
+<p>In other words, syscall awaits a variable number of arguments which are
+passed to the kernel code. The correct syscall(2) usage should look like
+this:</p>
+<pre><code>syscall(sn, vargz.buf, vargz.len, vargz.op, vargz.slot);
+</code></pre>
+<p>And now we get the expected output:</p>
+<pre><code>root@freebsd64:trigger/ # ./trigger
+0x800e16000
+256
+3
+1
+0x800e16000
+256
+3
+1
+root@freebsd64:trigger/ #
+</code></pre>
+<h1 id="why-the-original-code-worked-while-it-was-wrong">Why the Original Code Worked While It Was Wrong</h1>
+<p>aAs written above, the syscall convention for the 32bit architecture is
+different from the one for the 64bit architecture. Indeed, a syscall on a
+32bit FreeBSD system passes the arguments via the stack while the syscall
+offset is stored in the EAX register. The transfer into the kernel address
+space is done in &lsquo;cpu_fetch_syscall_args&rsquo; in &lsquo;sys/i386/i386/trap.c&rsquo;.</p>
+<pre><code>int
+cpu_fetch_syscall_args(struct thread *td, struct syscall_args *sa)
+{
+    ...
+    frame = td-&gt;td_frame;
+
+    params = (caddr_t)frame-&gt;tf_esp + sizeof(int);
+    sa-&gt;code = frame-&gt;tf_eax;
+	
+    ...
+	
+    if (params != NULL &amp;&amp; sa-&gt;narg != 0)
+        error = copyin(params, (caddr_t)sa-&gt;args,
+            (u_int)(sa-&gt;narg * sizeof(int)));
+    else
+    ...
+}
+</code></pre>
+<p>That is, &lsquo;params&rsquo; points to ESP+4 bytes offset. Later, the arguments are
+copied into the kernel space which is referenced by &lsquo;sa-&gt;args&rsquo;. &lsquo;args&rsquo; is
+an array of eight &lsquo;register_t&rsquo; which is defined as &lsquo;int32_t&rsquo; on the 32bit
+platform in comparison to the 64bit platform. And as &lsquo;struct args&rsquo; only
+consisted of integers they got copied into the syscall arguments which are
+given to the trigger function inside the kernel module. We could verify
+this by changing &lsquo;int op&rsquo; to &lsquo;long long op&rsquo; in the kernel module and in
+trigger.c. We get the following output:</p>
+<pre><code>root@freebsd64:trigger/ # ./trigger
+0x28414000
+256
+3
+1
+0x28414000
+256
+4294967295
+2
+root@freebsd64:trigger/ #
+</code></pre>
+<p>To bring this to an end: argp&rsquo;s version only worked for his special choice
+of arguments and only on 32bit. On 32bit FreeBSD platforms the arguments
+are transferred into kernel space by 4 byte integers, hence it will only
+work for intergers anyway. On 64bit FreeBSD platforms we have to use
+syscall(2) in the intended way.</p>
+<p>NB: Linux on 32bit platforms does use the CPU registers and not the stack
+to transfer syscall arguments into the kernelspace. That is, just use a
+struct to transfer arguments doesn&rsquo;t work.</p>
+<h1 id="misc">Misc.</h1>
+<p>I would like to thank fs (@__schulze) for giving me the hint that I used
+syscall(2) wrong and for pushing me to finally start a blog :)</p>
+
+      </article>
+
+      
+      <span class="f6 gray mv3" title="Lastmod: February 15, 2018. Published at: 2018-02-15.">
+        
+      </span>
+
+      
+
+  </section>
+
+  <footer>
+    <div>
+      <p class="f6 gray mt6 lh-copy">
+	Contact: mail at kkoenig.net | <a href='https://twitter.com/gr4yf0x'>Twitter</a> | <a href='https://github.com/raymontag'>Github</a>
+      </p>
+    </div>
+  </footer>
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.14.2/highlight.min.js"></script>
+
+<script>
+  hljs.initHighlightingOnLoad();
+</script>
+
+
+
+  </body>
+</html>
