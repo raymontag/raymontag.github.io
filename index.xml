@@ -57,5 +57,14 @@
 Well, at least this was my plan. In reality I ended researching how different operating systems resp.</description>
     </item>
     
+    <item>
+      <title>Advisory for StashCat</title>
+      <link>https://outerhaven.de/post/advisory-for-stashcat/</link>
+      <pubDate>Mon, 31 Jul 2017 20:00:00 +0200</pubDate>
+      
+      <guid>https://outerhaven.de/post/advisory-for-stashcat/</guid>
+      <description>Please see https://seclists.org/fulldisclosure/2017/Jul/90</description>
+    </item>
+    
   </channel>
 </rss>
