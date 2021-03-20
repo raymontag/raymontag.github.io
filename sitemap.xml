@@ -48,6 +48,11 @@
   </url>
   
   <url>
+    <loc>https://outerhaven.de/writings/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>https://outerhaven.de/categories/</loc>
   </url>
   
