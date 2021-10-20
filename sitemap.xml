@@ -1,68 +1,42 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
-  
   <url>
     <loc>https://outerhaven.de/</loc>
     <lastmod>2020-07-20T20:00:00+02:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://outerhaven.de/post/</loc>
     <lastmod>2020-07-20T20:00:00+02:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://outerhaven.de/post/writing-an-ios-kernel-exploit-from-scratch/</loc>
     <lastmod>2020-07-20T20:00:00+02:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://outerhaven.de/post/more-on-freebsd-refcount-overflows/</loc>
     <lastmod>2019-08-30T20:00:00+02:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://outerhaven.de/about/</loc>
     <lastmod>2019-07-09T20:06:16+02:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://outerhaven.de/post/exploiting-freebsd-sa-1902.fd/</loc>
     <lastmod>2019-07-08T20:00:00+02:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://outerhaven.de/post/small-mistakes-lead-to-big-problems/</loc>
     <lastmod>2018-04-22T20:00:00+02:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://outerhaven.de/post/every-journey-starts-with-a-fail/</loc>
     <lastmod>2018-02-15T19:48:27+02:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://outerhaven.de/post/advisory-for-stashcat/</loc>
     <lastmod>2017-07-31T20:00:00+02:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://outerhaven.de/code/</loc>
     <priority>0</priority>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://outerhaven.de/writings/</loc>
     <priority>0</priority>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://outerhaven.de/categories/</loc>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://outerhaven.de/tags/</loc>
   </url>
-  
 </urlset>

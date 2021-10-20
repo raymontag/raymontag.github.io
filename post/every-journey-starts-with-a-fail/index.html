@@ -135,19 +135,19 @@ processor.</p>
 this:</p>
 <pre><code>struct argz
 {
-    char *buf;
-    u_int len;
-    int op;
-    u_int slot;
+	char *buf;
+	u_int len;
+	int op;
+	u_int slot;
 };
 
 static int
 trigger(struct thread *td, struct argz *uap)
 {
-    uprintf(&quot;%p\n&quot;, uap-&gt;buf);
-    uprintf(&quot;%u\n&quot;, uap-&gt;len);
-    uprintf(&quot;%d\n&quot;, uap-&gt;op);
-    uprintf(&quot;%u\n&quot;, uap-&gt;slot);
+	uprintf(&quot;%p\n&quot;, uap-&gt;buf);
+	uprintf(&quot;%u\n&quot;, uap-&gt;len);
+	uprintf(&quot;%d\n&quot;, uap-&gt;op);
+	uprintf(&quot;%u\n&quot;, uap-&gt;slot);
 
     return 0;
 }
@@ -155,47 +155,47 @@ trigger(struct thread *td, struct argz *uap)
 <p>The userland caller looks like this:</p>
 <pre><code>struct argz
 {
-    char *buf;
-    u_int len;
-    int op;
-    u_int slot;
+	char *buf;
+	u_int len;
+	int op;
+	u_int slot;
 };
 
 int
 main(int argc, char *argv[])
 {
-    int sn, modid;
-    struct module_stat mstat;
-    struct argz vargz;
+	int sn, modid;
+	struct module_stat mstat;
+	struct argz vargz;
 
-    vargz.len = 256;
-    vargz.buf = calloc(vargz.len + 1, sizeof(char));
+	vargz.len = 256;
+	vargz.buf = calloc(vargz.len + 1, sizeof(char));
 
-    if(vargz.buf == NULL)
-    {
+	if(vargz.buf == NULL)
+	{
         perror(&quot;calloc&quot;);
         exit(1);
-    }
+	}
 
-    mstat.version = sizeof(mstat);
-    if((modid = modfind(&quot;sys/trigger&quot;)) == -1)
+	mstat.version = sizeof(mstat);
+	if((modid = modfind(&quot;sys/trigger&quot;)) == -1)
         err(1, &quot;error in modfind&quot;);
-    if(modstat(modid, &amp;mstat) != 0)
+	if(modstat(modid, &amp;mstat) != 0)
         err(1, &quot;error in modstat&quot;);
 
-    sn = mstat.data.intval;
-    vargz.op = 3;
+	sn = mstat.data.intval;
+	vargz.op = 3;
 
-    vargz.slot = 1;
-    printf(&quot;%p\n&quot;, (void*)vargz.buf);
-    printf(&quot;%u\n&quot;, (void*)vargz.len);
-    printf(&quot;%d\n&quot;, (void*)vargz.op);
-    printf(&quot;%u\n&quot;, (void*)vargz.slot);
-    if(syscall(sn, vargz) != 0)
+	vargz.slot = 1;
+	printf(&quot;%p\n&quot;, (void*)vargz.buf);
+	printf(&quot;%u\n&quot;, (void*)vargz.len);
+	printf(&quot;%d\n&quot;, (void*)vargz.op);
+	printf(&quot;%u\n&quot;, (void*)vargz.slot);
+	if(syscall(sn, vargz) != 0)
         err(1, &quot;error in syscall&quot;);
 
-    free(vargz.buf);
-    return 0;
+	free(vargz.buf);
+	return 0;
 }
 </code></pre>
 <p>So, after loading the kernel module with &lsquo;kldload trigger&rsquo; and executing
@@ -347,13 +347,13 @@ cpu_fetch_syscall_args(struct thread *td, struct syscall_args *sa)
     params = (caddr_t)frame-&gt;tf_esp + sizeof(int);
     sa-&gt;code = frame-&gt;tf_eax;
 	
-    ...
+	...
 	
     if (params != NULL &amp;&amp; sa-&gt;narg != 0)
         error = copyin(params, (caddr_t)sa-&gt;args,
             (u_int)(sa-&gt;narg * sizeof(int)));
     else
-    ...
+	...
 }
 </code></pre>
 <p>That is, &lsquo;params&rsquo; points to ESP+4 bytes offset. Later, the arguments are

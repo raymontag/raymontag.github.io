@@ -6,11 +6,7 @@
     <description>Recent content on K³ Research Documentation Project</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 20 Jul 2020 20:00:00 +0200</lastBuildDate>
-    
-	<atom:link href="https://outerhaven.de/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Mon, 20 Jul 2020 20:00:00 +0200</lastBuildDate><atom:link href="https://outerhaven.de/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Writing an iOS Kernel Exploit from Scratch</title>
       <link>https://outerhaven.de/post/writing-an-ios-kernel-exploit-from-scratch/</link>
