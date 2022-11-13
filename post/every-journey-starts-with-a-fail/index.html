@@ -173,15 +173,15 @@ main(int argc, char *argv[])
 
 	if(vargz.buf == NULL)
 	{
-        perror(&quot;calloc&quot;);
-        exit(1);
+		perror(&quot;calloc&quot;);
+		exit(1);
 	}
 
 	mstat.version = sizeof(mstat);
 	if((modid = modfind(&quot;sys/trigger&quot;)) == -1)
-        err(1, &quot;error in modfind&quot;);
+	    err(1, &quot;error in modfind&quot;);
 	if(modstat(modid, &amp;mstat) != 0)
-        err(1, &quot;error in modstat&quot;);
+	    err(1, &quot;error in modstat&quot;);
 
 	sn = mstat.data.intval;
 	vargz.op = 3;
@@ -192,7 +192,7 @@ main(int argc, char *argv[])
 	printf(&quot;%d\n&quot;, (void*)vargz.op);
 	printf(&quot;%u\n&quot;, (void*)vargz.slot);
 	if(syscall(sn, vargz) != 0)
-        err(1, &quot;error in syscall&quot;);
+	    err(1, &quot;error in syscall&quot;);
 
 	free(vargz.buf);
 	return 0;
@@ -350,7 +350,7 @@ cpu_fetch_syscall_args(struct thread *td, struct syscall_args *sa)
 	...
 	
     if (params != NULL &amp;&amp; sa-&gt;narg != 0)
-        error = copyin(params, (caddr_t)sa-&gt;args,
+	    error = copyin(params, (caddr_t)sa-&gt;args,
             (u_int)(sa-&gt;narg * sizeof(int)));
     else
 	...
@@ -401,7 +401,7 @@ syscall(2) wrong and for pushing me to finally start a blog :)</p>
   <footer>
     <div>
       <p class="f6 gray mt6 lh-copy">
-	Contact: mail at kkoenig.net | <a href='https://twitter.com/gr4yf0x'>Twitter</a> | <a href='https://github.com/raymontag'>Github</a>
+	Contact: mail at kkoenig.net | <a href='https://twitter.com/gr4yf0x'>Twitter</a> | <a rel='me' href='https://infosec.exchange/@gr4yf0x'>Mastodon</a> | <a href='https://github.com/raymontag'>Github</a>
       </p>
     </div>
   </footer>
