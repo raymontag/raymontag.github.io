@@ -265,7 +265,7 @@ lkmnosys(0x7fffffffeab0,0x300000100,0xd2,0x140) = 0 (0x0)
 </code></pre>
 <p>lkmnosys is our syscall. This name is hard coded into the kernel and
 corresponds to the syscall offset which was printed during the execution of
-kldload (&lsquo;trigger loaded at 210&rsquo;). The modstat(2) call before has the
+kldload (&rsquo;trigger loaded at 210&rsquo;). The modstat(2) call before has the
 offset 301, for example.</p>
 <p>Two things should catch our eyes:</p>
 <ol>
@@ -362,7 +362,7 @@ an array of eight &lsquo;register_t&rsquo; which is defined as &lsquo;int32_t&rs
 platform in comparison to the 64bit platform. And as &lsquo;struct args&rsquo; only
 consisted of integers they got copied into the syscall arguments which are
 given to the trigger function inside the kernel module. We could verify
-this by changing &lsquo;int op&rsquo; to &lsquo;long long op&rsquo; in the kernel module and in
+this by changing &lsquo;int op&rsquo; to &rsquo;long long op&rsquo; in the kernel module and in
 trigger.c. We get the following output:</p>
 <pre><code>root@freebsd64:trigger/ # ./trigger
 0x28414000
@@ -401,7 +401,7 @@ syscall(2) wrong and for pushing me to finally start a blog :)</p>
   <footer>
     <div>
       <p class="f6 gray mt6 lh-copy">
-	Contact: mail at kkoenig.net | <a href='https://twitter.com/gr4yf0x'>Twitter</a> | <a rel='me' href='https://infosec.exchange/@gr4yf0x'>Mastodon</a> | <a href='https://github.com/raymontag'>Github</a>
+	Contact: mail at kkoenig.net | <a href='https://twitter.com/gr4yf0x'>Twitter</a> | <a rel='me' href='https://nso.group/@grayfox'>Mastodon</a> | <a href='https://github.com/raymontag'>Github</a>
       </p>
     </div>
   </footer>
