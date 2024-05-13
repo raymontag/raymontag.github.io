@@ -6,15 +6,15 @@
     <description>Recent content in Posts on K³ Research Documentation Project</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 02 Aug 2023 17:00:00 +0200</lastBuildDate><atom:link href="https://outerhaven.de/post/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 02 Aug 2023 20:00:00 +0200</lastBuildDate><atom:link href="https://outerhaven.de/post/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Short Note About Container Escapes, Namespaces, and Filesystem Roots</title>
       <link>https://outerhaven.de/post/short-note-about-container-escapes-namespaces-and-filesystem-roots/</link>
-      <pubDate>Wed, 02 Aug 2023 17:00:00 +0200</pubDate>
+      <pubDate>Wed, 02 Aug 2023 20:00:00 +0200</pubDate>
       
       <guid>https://outerhaven.de/post/short-note-about-container-escapes-namespaces-and-filesystem-roots/</guid>
-      <description>Very recently h0mbre published a very detailed writeup about his attempt to exploit an n-day in Google&amp;rsquo;s kernelCTF. As part of this, the exploit must escape the container environment.
-Container environments are typically based on Linux Namespaces. Every namespace can give a different perspective on OS resources and in particular they allow to give a different view of the filesystem. Container solutions can use that behaviour to give the impression of a different filesystem root while it actually is a subfolder on the host&amp;rsquo;s filesystem (compare to chroot(1)).</description>
+      <description>Very recently h0mbre published a very detailed writeup about his attempt to exploit an n-day in Google’s kernelCTF. As part of this, the exploit must escape the container environment.
+Container environments are typically based on Linux Namespaces. Every namespace can give a different perspective on OS resources and in particular they allow to give a different view of the filesystem. Container solutions can use that behaviour to give the impression of a different filesystem root while it actually is a subfolder on the host’s filesystem (compare to chroot(1)).</description>
     </item>
     
     <item>

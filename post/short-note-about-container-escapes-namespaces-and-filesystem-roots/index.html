@@ -43,8 +43,8 @@
 />
 <meta
   name="twitter:description"
-  content="Very recently h0mbre published a very detailed writeup about his attempt to exploit an n-day in Google&rsquo;s kernelCTF. As part of this, the exploit must escape the container environment.
-Container environments are typically based on Linux Namespaces. Every namespace can give a different perspective on OS resources and in particular they allow to give a different view of the filesystem. Container solutions can use that behaviour to give the impression of a different filesystem root while it actually is a subfolder on the host&rsquo;s filesystem (compare to chroot(1)).|"
+  content="Very recently h0mbre published a very detailed writeup about his attempt to exploit an n-day in Google’s kernelCTF. As part of this, the exploit must escape the container environment.
+Container environments are typically based on Linux Namespaces. Every namespace can give a different perspective on OS resources and in particular they allow to give a different view of the filesystem. Container solutions can use that behaviour to give the impression of a different filesystem root while it actually is a subfolder on the host’s filesystem (compare to chroot(1)).|"
 />
 <meta name="twitter:image:src" content="" />
 <meta name="twitter:domain" content="https://outerhaven.de/post/short-note-about-container-escapes-namespaces-and-filesystem-roots/" />
@@ -103,37 +103,13 @@ Container environments are typically based on Linux Namespaces. Every namespace 
     <span class="f6 gray">August 2, 2023</span>
 
       <article itemprop="articleBody" id="content" class="w-90 lh-copy">
-        <p>Very recently <a href="https://twitter.com/h0mbre_">h0mbre</a> published a very detailed
-writeup about his attempt to exploit an n-day in Google&rsquo;s <a href="https://google.github.io/security-research/kernelctf/rules.html">kernelCTF</a>.
-As part of this, the exploit must escape the container environment.</p>
-<p>Container environments are typically based on Linux <a href="https://man7.org/linux/man-pages/man7/namespaces.7.html">Namespaces</a>. Every
-namespace can give a different perspective on OS resources and in particular they allow to give a different view
-of the filesystem. Container solutions can use that behaviour to give the impression of a different filesystem root while
-it actually is a subfolder on the host&rsquo;s filesystem (compare to <a href="https://linux.die.net/man/1/chroot">chroot(1)</a>).</p>
-<p>h0mbre noted at the end of his writeup that he struggled shortly to read the actual flag from the host after the exploit
-escalated privileges perfectly and the <code>nsproxy</code> member of the exploit&rsquo;s <code>task_struct</code>
-was successfully overwritten. The exploit still had the filesystem root of the container.
-The reason for this is that the exploit still lives in the container&rsquo;s namespace. h0mbre
-therefore opted to call <a href="https://man7.org/linux/man-pages/man2/setns.2.html">setns(2)</a> in order to change the mount namespace
-to the one of the host&rsquo;s init process which changes the filesystem root to that of the host.</p>
-<p>I wrote myself about the very same topic in the <a href="https://outerhaven.de/post/exploiting-cve-2021-3490-for-containerescapes/">blog</a>
-of my current employer. However, I choose to overwrite the <a href="https://elixir.bootlin.com/linux/v6.4.7/source/include/linux/sched.h#L1087">fs</a>
-member f the exploit&rsquo;s <code>task_struct</code>. That worked out as well.</p>
-<p>The reason why both solutions work equivalent can be found in the function
-<a href="https://elixir.bootlin.com/linux/v6.4.7/source/fs/namespace.c#L4645">mntns_install</a>. It is called
-by the <code>setns(2)</code> syscall which sets the namespaces of a thread according to the procfs-namespace symbolic link given
-as the first argument. It calls the functions <a href="https://elixir.bootlin.com/linux/v6.4.7/source/fs/fs_struct.c#L34">set_fs_pwd</a> and
-<a href="https://elixir.bootlin.com/linux/v6.4.7/source/fs/fs_struct.c#L15">set_fs_root</a> in turn which set the current directory and filesystem root
-according to the linked namespace. Because the <code>cred</code> and <code>nsproxy</code> member of the exploit&rsquo;s <code>task_struct</code> are already
-overwritten, using the <code>/proc/self/ns/mnt</code> link for the mount namespace will set the mount namespace to the one of the host&rsquo;s init process
-and accordingly set the <code>fs</code> object to have the host&rsquo;s filesystem root.</p>
+        <p>Very recently <a href="https://twitter.com/h0mbre_">h0mbre</a> published a very detailed writeup about his attempt to exploit an n-day in Google’s <a href="https://google.github.io/security-research/kernelctf/rules.html">kernelCTF</a>. As part of this, the exploit must escape the container environment.</p>
+<p>Container environments are typically based on Linux <a href="https://man7.org/linux/man-pages/man7/namespaces.7.html">Namespaces</a>. Every namespace can give a different perspective on OS resources and in particular they allow to give a different view of the filesystem. Container solutions can use that behaviour to give the impression of a different filesystem root while it actually is a subfolder on the host’s filesystem (compare to <a href="https://linux.die.net/man/1/chroot">chroot(1)</a>).</p>
+<p>h0mbre noted at the end of his writeup that he struggled shortly to read the actual flag from the host after the exploit escalated privileges perfectly and the <code>nsproxy</code> member of the exploit’s <code>task_struct</code> was successfully overwritten. The exploit still had the filesystem root of the container. The reason for this is that the exploit still lives in the container’s namespace. h0mbre therefore opted to call <a href="https://man7.org/linux/man-pages/man2/setns.2.html">setns(2)</a> in order to change the mount namespace to the one of the host’s init process which changes the filesystem root to that of the host.</p>
+<p>I wrote myself about the very same topic in the <a href="https://outerhaven.de/post/exploiting-cve-2021-3490-for-containerescapes/">blog</a> of my current employer. However, I choose to overwrite the <a href="https://elixir.bootlin.com/linux/v6.4.7/source/include/linux/sched.h#L1087">fs</a> member of the exploit’s <code>task_struct</code>. That worked out as well.</p>
+<p>The reason why both solutions work equivalent can be found in the function <a href="https://elixir.bootlin.com/linux/v6.4.7/source/fs/namespace.c#L4645">mntns_install</a>. It is called by the <code>setns(2)</code> syscall which sets the namespaces of a thread according to the procfs-namespace symbolic link given as the first argument. It calls the functions <a href="https://elixir.bootlin.com/linux/v6.4.7/source/fs/fs_struct.c#L34">set_fs_pwd</a> and <a href="https://elixir.bootlin.com/linux/v6.4.7/source/fs/fs_struct.c#L15">set_fs_root</a> in turn which set the current directory and filesystem root according to the linked namespace. Because the <code>cred</code> and <code>nsproxy</code> member of the exploit’s <code>task_struct</code> are already overwritten, using the <code>/proc/self/ns/mnt</code> link for the mount namespace will set the mount namespace to the one of the host’s init process and accordingly set the <code>fs</code> object to have the host’s filesystem root.</p>
 <p>Simply overwritting the <code>fs</code> member in <code>task_struct</code> just has the same effect.</p>
-<p>Which solution is better depends probably on the exploit and available primitives. In a ROP chain scenario using <code>setns(2)</code> is probably
-easier as the exploit could just jump to the function instead of collection a lot of ROP gadgets to overwrite <code>fs</code> in <code>task_struct</code>.
-On the other side, in one <a href="https://github.com/chompie1337/Linux_LPE_eBPF_CVE-2021-3490">PoC</a> exploit I experimented with,
-the arbitrary write primitive turned out unreliable for overwriting complete pointers. Depending on the primitive, the signal handlers
-after <code>nsproxy</code> could be corrupted, too, again resulting in a very unstable exploit (h0mbre described that particular case as well).
-Just overwriting <code>fs</code> turned out to be much more reliable in those cases for me.</p>
+<p>Which solution is better depends probably on the exploit and available primitives. In a ROP chain scenario using <code>setns(2)</code> is probably easier as the exploit could just jump to the function instead of collection a lot of ROP gadgets to overwrite <code>fs</code> in <code>task_struct</code>. On the other side, in one <a href="https://github.com/chompie1337/Linux_LPE_eBPF_CVE-2021-3490">PoC</a> exploit I experimented with, the arbitrary write primitive turned out unreliable for overwriting complete pointers. Depending on the primitive, the signal handlers after <code>nsproxy</code> could be corrupted, too, again resulting in a very unstable exploit (h0mbre described that particular case as well). Just overwriting <code>fs</code> turned out to be much more reliable in those cases for me.</p>
 
       </article>
 
