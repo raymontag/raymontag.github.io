@@ -6,80 +6,63 @@
     <description>Recent content on K³ Research Documentation Project</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 02 Aug 2023 20:00:00 +0200</lastBuildDate><atom:link href="https://outerhaven.de/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 02 Aug 2023 20:00:00 +0200</lastBuildDate>
+    <atom:link href="https://outerhaven.de/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Short Note About Container Escapes, Namespaces, and Filesystem Roots</title>
       <link>https://outerhaven.de/post/short-note-about-container-escapes-namespaces-and-filesystem-roots/</link>
       <pubDate>Wed, 02 Aug 2023 20:00:00 +0200</pubDate>
-      
       <guid>https://outerhaven.de/post/short-note-about-container-escapes-namespaces-and-filesystem-roots/</guid>
-      <description>Very recently h0mbre published a very detailed writeup about his attempt to exploit an n-day in Google’s kernelCTF. As part of this, the exploit must escape the container environment.
-Container environments are typically based on Linux Namespaces. Every namespace can give a different perspective on OS resources and in particular they allow to give a different view of the filesystem. Container solutions can use that behaviour to give the impression of a different filesystem root while it actually is a subfolder on the host’s filesystem (compare to chroot(1)).</description>
+      <description>Very recently h0mbre published a very detailed writeup about his attempt to exploit an n-day in Google’s kernelCTF. As part of this, the exploit must escape the container environment.&#xA;Container environments are typically based on Linux Namespaces. Every namespace can give a different perspective on OS resources and in particular they allow to give a different view of the filesystem. Container solutions can use that behaviour to give the impression of a different filesystem root while it actually is a subfolder on the host’s filesystem (compare to chroot(1)).</description>
     </item>
-    
     <item>
       <title>Exploiting CVE-2021-3490 for Container Escapes</title>
       <link>https://outerhaven.de/post/exploiting-cve-2021-3490-for-container-escapes/</link>
       <pubDate>Wed, 18 Jan 2023 20:00:00 +0200</pubDate>
-      
       <guid>https://outerhaven.de/post/exploiting-cve-2021-3490-for-container-escapes/</guid>
       <description>Please see https://www.crowdstrike.com/blog/exploiting-cve-2021-3490-for-container-escapes/</description>
     </item>
-    
     <item>
       <title>Writing an iOS Kernel Exploit from Scratch</title>
       <link>https://outerhaven.de/post/writing-an-ios-kernel-exploit-from-scratch/</link>
       <pubDate>Mon, 20 Jul 2020 20:00:00 +0200</pubDate>
-      
       <guid>https://outerhaven.de/post/writing-an-ios-kernel-exploit-from-scratch/</guid>
       <description>Please see https://www.secfault-security.com/blog/chain3.html</description>
     </item>
-    
     <item>
       <title>More on FreeBSD Refcount Overflows</title>
       <link>https://outerhaven.de/post/more-on-freebsd-refcount-overflows/</link>
       <pubDate>Fri, 30 Aug 2019 20:00:00 +0200</pubDate>
-      
       <guid>https://outerhaven.de/post/more-on-freebsd-refcount-overflows/</guid>
       <description>Please see https://www.secfault-security.com/blog/FreeBSD-SA-1924.mqueuefs.html</description>
     </item>
-    
     <item>
       <title>Exploiting FreeBSD-SA-19:02.fd</title>
       <link>https://outerhaven.de/post/exploiting-freebsd-sa-1902.fd/</link>
       <pubDate>Mon, 08 Jul 2019 20:00:00 +0200</pubDate>
-      
       <guid>https://outerhaven.de/post/exploiting-freebsd-sa-1902.fd/</guid>
       <description>Please see https://www.secfault-security.com/blog/FreeBSD-SA-1902.fd.html</description>
     </item>
-    
     <item>
       <title>Small Mistakes Lead To Big Problems</title>
       <link>https://outerhaven.de/post/small-mistakes-lead-to-big-problems/</link>
       <pubDate>Sun, 22 Apr 2018 20:00:00 +0200</pubDate>
-      
       <guid>https://outerhaven.de/post/small-mistakes-lead-to-big-problems/</guid>
       <description>Introduction While I don&amp;rsquo;t have much time at the moment for my FreeBSD kernel exploitation project, I needed a small break and had a look at a smaller PHP project. I searched for something which is small enough to read the code fast in its entirety to improve my general source code assessment skills. I ended with PHPLiteAdmin, a small project which seems to be something like PHPMyAdmin but for SQLite database files.</description>
     </item>
-    
     <item>
       <title>Every Journey Starts with a FAIL</title>
       <link>https://outerhaven.de/post/every-journey-starts-with-a-fail/</link>
       <pubDate>Thu, 15 Feb 2018 19:48:27 +0200</pubDate>
-      
       <guid>https://outerhaven.de/post/every-journey-starts-with-a-fail/</guid>
-      <description>Introduction Not long ago I started looking into FreeBSD kernel exploitation. There are only a few ressources but probably the best starting point is argp&amp;rsquo;s Phrack article from 2009. And while he does only provide one technique, I wanted to understand it and port it to a modern FreeBSD release before describing new, own researched techniques.
-Well, at least this was my plan. In reality I ended researching how different operating systems resp.</description>
+      <description>Introduction Not long ago I started looking into FreeBSD kernel exploitation. There are only a few ressources but probably the best starting point is argp&amp;rsquo;s Phrack article from 2009. And while he does only provide one technique, I wanted to understand it and port it to a modern FreeBSD release before describing new, own researched techniques.&#xA;Well, at least this was my plan. In reality I ended researching how different operating systems resp.</description>
     </item>
-    
     <item>
       <title>Advisory for StashCat</title>
       <link>https://outerhaven.de/post/advisory-for-stashcat/</link>
       <pubDate>Mon, 31 Jul 2017 20:00:00 +0200</pubDate>
-      
       <guid>https://outerhaven.de/post/advisory-for-stashcat/</guid>
       <description>Please see https://seclists.org/fulldisclosure/2017/Jul/90</description>
     </item>
-    
   </channel>
 </rss>

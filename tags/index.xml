@@ -5,6 +5,7 @@
     <link>https://outerhaven.de/tags/</link>
     <description>Recent content in Tags on K³ Research Documentation Project</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language><atom:link href="https://outerhaven.de/tags/index.xml" rel="self" type="application/rss+xml" />
+    <language>en-us</language>
+    <atom:link href="https://outerhaven.de/tags/index.xml" rel="self" type="application/rss+xml" />
   </channel>
 </rss>
